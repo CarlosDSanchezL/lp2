@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Usuario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 1em;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        input[type="date"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Agregar un nuevo usuario</h2>
+
+<form id="userForm">
+    <label for="name">Nombre:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="age">Edad:</label>
+    <input type="number" id="age" name="age" required>
+
+    <label for="email">Correo electrónico:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="password">Contraseña:</label>
+    <input type="password" id="password" name="password" required>
+
+    <label for="created">Fecha de creación:</label>
+    <input type="date" id="created" name="created" required>
+
+    <label for="role">ID del Rol:</label>
+    <input type="number" id="role" name="role" required>
+
+    <button type="submit">Agregar Usuario</button>
+</form>
+
+<script>
+    // Manejar el envío del formulario
+    document.getElementById('userForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Obtener los datos del formulario
+        const name = document.getElementById('name').value;
+        const age = document.getElementById('age').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const created = document.getElementById('created').value;
+        const role = document.getElementById('role').value;
+
+        // Crear el objeto de datos para enviar al backend
+        const userData = {
+            name: name,
+            age: parseInt(age),
+            email: email,
+            password: password,
+            created: created,
+            role: {
+                idrole: parseInt(role)
+            }
+        };
+
+        // Enviar los datos usando fetch (método POST)
+        fetch('/users', { // Cambia la URL según la configuración de tu API
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al agregar el usuario');
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Usuario agregado exitosamente');
+            // Limpiar el formulario
+            document.getElementById('userForm').reset();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Hubo un error al agregar el usuario');
+        });
+    });
+</script>
+
+</body>
+</html>
